@@ -1,7 +1,7 @@
 package main
 
 import (
-	"advent/solutions/d01sonarsweep"
+	"advent/solutions/d01caloriecounting"
 	"flag"
 	"fmt"
 	"time"
@@ -14,7 +14,7 @@ func main() {
 	flag.Parse()
 
 	completed := []string{
-		"sonarsweep",
+		"caloriecounting",
 	}
 	if *all {
 		previous := time.Now()
@@ -32,11 +32,12 @@ func main() {
 
 func RunChallenge(challenge string) string {
 	var res string
-	input := fmt.Sprintf("inputs/%s.txt", challenge)
 	switch challenge {
-	case "sonarsweep", "1", "01":
-		A, B := d01sonarsweep.LoadSonar(input)
-		res = fmt.Sprintf("%s Results A: %d B: %d", challenge, A, B)
+	case "caloriecounting", "1", "01":
+		input := "inputs/d01caloriecounting.txt"
+		A, B := d01caloriecounting.Run(input)
+		res = fmt.Sprintf("%s Results A: %s B: %s", challenge, A, B)
+
 	}
 	return res
 }

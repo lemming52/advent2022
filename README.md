@@ -22,7 +22,7 @@ go run main.go -all
 
 Day | Challenge |Day | Challenge
 ----|-----------|----|----------
-1 | ` ` | 14 | ` `
+1 | `caloriecounting` | 14 | ` `
 2 | ` ` | 15 | ` `
 3 | ` ` | 16 | ` `
 4 | ` ` | 17 | ` `
