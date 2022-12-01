@@ -4,22 +4,40 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 )
 
-func FindMaxCalorie(values []int) int {
-	maxVal, cumulative := 0, 0
+func findMaxCalorie(values []int, target int) int {
+	maxVals := make([]int, target)
+	cumulative := 0
 	for _, v := range values {
 		if v == -1 {
-			if cumulative > maxVal {
-				maxVal = cumulative
-			}
+			maxVals = updateMaxValues(maxVals, cumulative)
 			cumulative = 0
 			continue
 		}
 		cumulative += v
 	}
-	return maxVal
+	if cumulative != 0 {
+		maxVals = updateMaxValues(maxVals, cumulative)
+	}
+	total := 0
+	for _, v := range maxVals {
+		total += v
+	}
+	return total
+}
+
+func updateMaxValues(maxVals []int, newVal int) []int {
+	i := sort.SearchInts(maxVals, newVal)
+	if i == len(maxVals) {
+		maxVals = append(maxVals, newVal)
+	} else {
+		maxVals = append(maxVals[:i+1], maxVals[i:]...)
+		maxVals[i] = newVal
+	}
+	return maxVals[1:]
 }
 
 func Run(path string) (string, string) {
@@ -47,5 +65,5 @@ func Run(path string) (string, string) {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	return strconv.Itoa(FindMaxCalorie(values)), "B"
+	return strconv.Itoa(findMaxCalorie(values, 1)), strconv.Itoa(findMaxCalorie(values, 3))
 }

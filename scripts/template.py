@@ -69,7 +69,7 @@ def build_challenge_calls(challenges: Dict[int, str]) -> str:
         number = str(day)
         full_number = f'{day:02d}'
         template = f"""\tcase "{name}", "{number}", "{full_number}":
-        input := fmt.Sprintf("inputs/d{full_number}{name}.txt", challenge)
+        input := "inputs/d{full_number}{name}.txt"
 		A, B := d{full_number}{name}.Run(input)
 		res = fmt.Sprintf("%s Results A: %s B: %s", challenge, A, B)
 """
@@ -82,7 +82,7 @@ def build_package_file(number, name: str) -> str:
 
 import (
 	"bufio"
-	"log
+	"log"
     "os"
 )
 
@@ -126,7 +126,7 @@ def main() -> None:
         return
     challenges[int(args.day)] = args.name
     number = f'{args.day:02d}'
-    with open('tmp.go', 'w') as f:
+    with open('main.go', 'w') as f:
         f.write(build_main(challenges))
     os.mkdir(f'solutions/d{number}{args.name}')
     with open(f'solutions/d{number}{args.name}/{args.name}.go', 'w') as f:

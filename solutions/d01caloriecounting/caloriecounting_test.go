@@ -23,7 +23,10 @@ func TestFindMaxCalorie(t *testing.T) {
 		-1,
 		10000,
 	}
-	expected := 24000
-	res := FindMaxCalorie(input)
-	assert.Equal(t, expected, res)
+	expectedA := 24000
+	expectedB := 45000
+	resA := findMaxCalorie(input, 1)
+	resB := findMaxCalorie(input, 3)
+	assert.Equal(t, expectedA, resA)
+	assert.Equal(t, expectedB, resB)
 }
