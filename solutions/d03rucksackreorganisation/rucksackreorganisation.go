@@ -42,6 +42,34 @@ func itemPriority(r rune) int {
 	return int(r - capsRuneOffset)
 }
 
+func inspectGroups(rucksacks []string) int {
+	score := 0
+	for i := 0; i < len(rucksacks)/3; i++ {
+		shared := findSharedGroup(rucksacks[i*3 : i*3+3])
+		score += itemPriority(shared)
+	}
+	return score
+}
+
+func findSharedGroup(group []string) rune {
+	shared := map[rune]bool{}
+	for _, r := range group[0] {
+		shared[r] = true
+	}
+	subset := map[rune]bool{}
+	for _, r := range group[1] {
+		if _, ok := shared[r]; ok {
+			subset[r] = true
+		}
+	}
+	for _, r := range group[2] {
+		if _, ok := subset[r]; ok {
+			return r
+		}
+	}
+	return '0'
+}
+
 func Run(path string) (string, string) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -57,5 +85,5 @@ func Run(path string) (string, string) {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	return strconv.Itoa(inspectRucksacks(rucksacks)), "B"
+	return strconv.Itoa(inspectRucksacks(rucksacks)), strconv.Itoa(inspectGroups(rucksacks))
 }

@@ -41,3 +41,17 @@ func TestItemPriority(t *testing.T) {
 		})
 	}
 }
+
+func TestInspectGroups(t *testing.T) {
+	input := []string{
+		"vJrwpWtwJgWrhcsFMMfFFhFp",
+		"jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+		"PmmdzqPrVvPwwTWBwg",
+		"wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+		"ttgJtRGJQctTZtZT",
+		"CrZsJsPPZsGzwwsLwLmpwMDw",
+	}
+	expected := 70
+	res := inspectGroups(input)
+	assert.Equal(t, expected, res)
+}
