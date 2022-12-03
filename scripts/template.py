@@ -71,7 +71,7 @@ def build_challenge_calls(challenges: Dict[int, str]) -> str:
         template = f"""\tcase "{name}", "{number}", "{full_number}":
         input := "inputs/d{full_number}{name}.txt"
 		A, B := d{full_number}{name}.Run(input)
-		res = fmt.Sprintf("%s Results A: %s B: %s", challenge, A, B)
+		res = fmt.Sprintf("{name} Results A: %s B: %s", A, B)
 """
         res.append(template)
     return ''.join(res)
