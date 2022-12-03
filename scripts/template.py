@@ -32,7 +32,7 @@ import (
 
 func main() {{
 	var challenge string
-	flag.StringVar(&challenge, "challenge", "sonarsweep", "name of challenge")
+	flag.StringVar(&challenge, "challenge", "caloriecounting", "name of challenge")
 	all := flag.Bool("all", false, "display all results")
 	flag.Parse()
 

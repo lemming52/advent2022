@@ -2,15 +2,16 @@
 
 My set of solutions for [Advent of Code 2022](https://adventofcode.com/2022), written in Golang because _I want practice_.
 
-> ?
+> The search for Star Fruit
 
 ## Running
 
 My inputs from the challenges are all stored in the `inputs` directory, and at the time of writing these files are effectively hardcoded into the running.
 
-To run a particular day (i.e. _sonarsweep_, ...)
-```
+To run a particular day (i.e. _caloriecounting_, ...) use either the name or the number
+```sh
 go run main.go -challenge sonarsweep
+go run main.go -challenge 1
 ```
 
 To run all days
