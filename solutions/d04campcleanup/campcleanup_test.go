@@ -17,9 +17,10 @@ func TestSpotOverlaps(t *testing.T) {
 		"6-6,4-6",
 		"2-6,4-8",
 	}
-	expected := 2
-	res := spotOverlaps(input)
-	assert.Equal(t, expected, res)
+	expectedContained, expectedOverlap := 2, 4
+	contained, overlap := spotOverlaps(input)
+	assert.Equal(t, expectedContained, contained)
+	assert.Equal(t, expectedOverlap, overlap)
 }
 
 func TestNewAssignment(t *testing.T) {

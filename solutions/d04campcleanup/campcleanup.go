@@ -50,19 +50,32 @@ func (a *Assignment) fullyContained() bool {
 	return true
 }
 
-func spotOverlaps(assignments []string) int {
+func (a *Assignment) overlap() bool {
+	if a.a0 < a.b0 {
+		return a.b0 <= a.a1
+	}
+	if a.b0 < a.a0 {
+		return a.a0 <= a.b1
+	}
+	return true
+}
+
+func spotOverlaps(assignments []string) (int, int) {
 	pattern, err := regexp.Compile(assignmentPattern)
 	if err != nil {
 		log.Fatal(err)
 	}
-	count := 0
+	contained, overlap := 0, 0
 	for _, a := range assignments {
 		assignment := newAssignment(a, pattern)
 		if assignment.fullyContained() {
-			count += 1
+			contained += 1
+			overlap += 1
+		} else if assignment.overlap() {
+			overlap += 1
 		}
 	}
-	return count
+	return contained, overlap
 }
 
 func Run(path string) (string, string) {
@@ -80,5 +93,6 @@ func Run(path string) (string, string) {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	return strconv.Itoa(spotOverlaps(assignments)), "B"
+	a, b := spotOverlaps(assignments)
+	return strconv.Itoa(a), strconv.Itoa(b)
 }
