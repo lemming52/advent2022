@@ -5,6 +5,7 @@ import (
 	"advent/solutions/d02rockpaperscissors"
 	"advent/solutions/d03rucksackreorganisation"
 	"advent/solutions/d04campcleanup"
+	"advent/solutions/d05supplystacks"
 	"flag"
 	"fmt"
 	"time"
@@ -21,6 +22,7 @@ func main() {
 		"rockpaperscissors",
 		"rucksackreorganisation",
 		"campcleanup",
+		"supplystacks",
 	}
 	if *all {
 		previous := time.Now()
@@ -55,6 +57,10 @@ func RunChallenge(challenge string) string {
         input := "inputs/d04campcleanup.txt"
 		A, B := d04campcleanup.Run(input)
 		res = fmt.Sprintf("campcleanup Results A: %s B: %s", A, B)
+	case "supplystacks", "5", "05":
+        input := "inputs/d05supplystacks.txt"
+		A, B := d05supplystacks.Run(input)
+		res = fmt.Sprintf("supplystacks Results A: %s B: %s", A, B)
 
     }
 	return res
