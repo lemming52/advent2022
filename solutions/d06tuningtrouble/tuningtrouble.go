@@ -2,47 +2,22 @@ package d06tuningtrouble
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
 )
 
-func scanForStart(stream string) int {
-	prior := stream[0:3]
-	count := 3
-	i := 3
-	for i < len(stream) {
-		c := rune(stream[i])
-		count += 1
-		fmt.Println(count, i, string(c), prior)
-		match := false
-		for j, p := range prior {
-			if p == c {
-				match = true
-				prior = stream[i+j-2 : i+j+1]
-				i += j
-				break
-			}
-		}
-		if !match {
-			return count
-		}
-	}
-	return 0
-}
-
-func checkIfStart(s string, offset int) int {
+func findNonRepeatingSubstring(s string, offset, length int) int {
 	chars := map[rune]int{
 		rune(s[0]): 0,
 	}
-	for i, c := range s[1:4] {
+	for i, c := range s[1:length] {
 		if v, ok := chars[c]; ok {
-			return checkIfStart(s[v+1:], offset+v+1)
+			return findNonRepeatingSubstring(s[v+1:], offset+v+1, length)
 		}
 		chars[c] = i + 1
 	}
-	return offset + 4
+	return offset + length
 }
 
 func Run(path string) (string, string) {
@@ -60,5 +35,5 @@ func Run(path string) (string, string) {
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	return strconv.Itoa(checkIfStart(input, 0)), "B"
+	return strconv.Itoa(findNonRepeatingSubstring(input, 0, 4)), strconv.Itoa(findNonRepeatingSubstring(input, 0, 14))
 }
