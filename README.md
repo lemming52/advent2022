@@ -2,15 +2,16 @@
 
 My set of solutions for [Advent of Code 2022](https://adventofcode.com/2022), written in Golang because _I want practice_.
 
-> ?
+> In search of jungle star fruit.
 
 ## Running
 
 My inputs from the challenges are all stored in the `inputs` directory, and at the time of writing these files are effectively hardcoded into the running.
 
-To run a particular day (i.e. _sonarsweep_, ...)
-```
-go run main.go -challenge sonarsweep
+To run a particular day (i.e. _campcleanup_, ...) use either the name or the day
+```sh
+go run main.go -challenge campcleanup
+go run main.go -challenge 4
 ```
 
 To run all days
@@ -24,10 +25,10 @@ Day | Challenge |Day | Challenge
 ----|-----------|----|----------
 1 | `caloriecounting` | 14 | ` `
 2 | `rockpaperscissors` | 15 | ` `
-3 | ` ` | 16 | ` `
-4 | ` ` | 17 | ` `
-5 | ` ` | 18 | ` `
-6 | ` ` | 19 | ` `
+3 | `rucksackreorganisation` | 16 | ` `
+4 | `campcleanup` | 17 | ` `
+5 | `supplystacks` | 18 | ` `
+6 | `tuningtrouble` | 19 | ` `
 7 | ` ` | 20 | ` `
 8 | ` ` | 21 | ` `
 9 | ` ` | 22 | ` `
