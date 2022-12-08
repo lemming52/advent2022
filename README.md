@@ -29,8 +29,8 @@ Day | Challenge |Day | Challenge
 4 | `campcleanup` | 17 | ` `
 5 | `supplystacks` | 18 | ` `
 6 | `tuningtrouble` | 19 | ` `
-7 | ` ` | 20 | ` `
-8 | ` ` | 21 | ` `
+7 | `nospaceleftondevice` | 20 | ` `
+8 | `treetoptreehouse` | 21 | ` `
 9 | ` ` | 22 | ` `
 10 | ` ` | 23 | ` `
 11 | ` ` | 24 | ` `
