@@ -14,7 +14,7 @@ func TestDetermineSightlines(t *testing.T) {
 		"33549",
 		"35390",
 	}
-	expected := 21
+	expected := 22
 	res := DetermineSightlines(input)
 	assert.Equal(t, expected, res)
 }

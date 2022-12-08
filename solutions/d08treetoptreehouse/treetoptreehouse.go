@@ -29,17 +29,22 @@ func newTreeMap(lines []string) *TreeMap {
 	}
 }
 
-func (t *TreeMap) CountVisibleTrees() int {
+func (t *TreeMap) CountVisibleTrees() (int, int) {
 	// account for edges
 	count := 2*len(t.trees) + 2*len(t.trees[0]) - 4
+	maxScore := 0
 	for i := 1; i < len(t.trees)-1; i++ {
 		for j := 1; j < len(t.trees[0])-1; j++ {
 			if t.treeIsVisible(i, j) {
 				count += 1
+				score := t.scenicScore(i, j)
+				if score > maxScore {
+					maxScore = score
+				}
 			}
 		}
 	}
-	return count
+	return count, maxScore
 }
 
 func (t *TreeMap) treeIsVisible(x, y int) bool {
@@ -67,12 +72,42 @@ func (t *TreeMap) visibleY(x, y, ymin, ymax int) bool {
 	return true
 }
 
-func DetermineSightlines(trees []string) int {
+func (t *TreeMap) scenicScore(x, y int) int {
+	return t.scoreX(x, y, x, -1) *
+		t.scoreX(x, y, t.xMax-x, 1) *
+		t.scoreY(x, y, y, -1) *
+		t.scoreY(x, y, t.yMax-y, 1)
+}
+
+func (t *TreeMap) scoreX(x, y, maxDistance, direction int) int {
+	distance := 1
+	for distance < maxDistance {
+		if t.trees[x+direction*distance][y] >= t.trees[x][y] {
+			return distance
+		}
+		distance += 1
+	}
+	return distance
+}
+
+func (t *TreeMap) scoreY(x, y, maxDistance, direction int) int {
+	distance := 1
+	for distance < maxDistance {
+		if t.trees[x][y+direction*distance] >= t.trees[x][y] {
+			return distance
+		}
+		distance += 1
+	}
+	return distance
+}
+
+func DetermineSightlines(trees []string) (int, int) {
 	treeMap := newTreeMap(trees)
 	return treeMap.CountVisibleTrees()
 }
 
 func Run(path string) (string, string) {
 	lines := utils.LoadAsStrings(path)
-	return strconv.Itoa(DetermineSightlines(lines)), "B"
+	a, b := DetermineSightlines(lines)
+	return strconv.Itoa(a), strconv.Itoa(b)
 }
