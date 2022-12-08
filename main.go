@@ -8,6 +8,7 @@ import (
 	"advent/solutions/d05supplystacks"
 	"advent/solutions/d06tuningtrouble"
 	"advent/solutions/d07nospaceleftondevice"
+	"advent/solutions/d08treetoptreehouse"
 	"flag"
 	"fmt"
 	"time"
@@ -27,6 +28,7 @@ func main() {
 		"supplystacks",
 		"tuningtrouble",
 		"nospaceleftondevice",
+		"treetoptreehouse",
 	}
 	if *all {
 		previous := time.Now()
@@ -73,6 +75,10 @@ func RunChallenge(challenge string) string {
         input := "inputs/d07nospaceleftondevice.txt"
 		A, B := d07nospaceleftondevice.Run(input)
 		res = fmt.Sprintf("nospaceleftondevice Results A: %s B: %s", A, B)
+	case "treetoptreehouse", "8", "08":
+        input := "inputs/d08treetoptreehouse.txt"
+		A, B := d08treetoptreehouse.Run(input)
+		res = fmt.Sprintf("treetoptreehouse Results A: %s B: %s", A, B)
 
     }
 	return res

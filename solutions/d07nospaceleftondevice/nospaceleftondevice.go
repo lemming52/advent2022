@@ -2,7 +2,6 @@ package d07nospaceleftondevice
 
 import (
 	"advent/solutions/utils"
-	"fmt"
 	"log"
 	"strconv"
 	"strings"
