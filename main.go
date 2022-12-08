@@ -7,6 +7,7 @@ import (
 	"advent/solutions/d04campcleanup"
 	"advent/solutions/d05supplystacks"
 	"advent/solutions/d06tuningtrouble"
+	"advent/solutions/d07nospaceleftondevice"
 	"flag"
 	"fmt"
 	"time"
@@ -14,7 +15,7 @@ import (
 
 func main() {
 	var challenge string
-	flag.StringVar(&challenge, "challenge", "sonarsweep", "name of challenge")
+	flag.StringVar(&challenge, "challenge", "campcleanup", "name or number of challenge")
 	all := flag.Bool("all", false, "display all results")
 	flag.Parse()
 
@@ -25,6 +26,7 @@ func main() {
 		"campcleanup",
 		"supplystacks",
 		"tuningtrouble",
+		"nospaceleftondevice",
 	}
 	if *all {
 		previous := time.Now()
@@ -67,6 +69,10 @@ func RunChallenge(challenge string) string {
         input := "inputs/d06tuningtrouble.txt"
 		A, B := d06tuningtrouble.Run(input)
 		res = fmt.Sprintf("tuningtrouble Results A: %s B: %s", A, B)
+	case "nospaceleftondevice", "7", "07":
+        input := "inputs/d07nospaceleftondevice.txt"
+		A, B := d07nospaceleftondevice.Run(input)
+		res = fmt.Sprintf("nospaceleftondevice Results A: %s B: %s", A, B)
 
     }
 	return res
