@@ -31,7 +31,7 @@ Day | Challenge |Day | Challenge
 6 | `tuningtrouble` | 19 | ` `
 7 | `nospaceleftondevice` | 20 | ` `
 8 | `treetoptreehouse` | 21 | ` `
-9 | ` ` | 22 | ` `
+9 | `ropebridge` | 22 | ` `
 10 | ` ` | 23 | ` `
 11 | ` ` | 24 | ` `
 12 | ` ` | 25 | ` `
