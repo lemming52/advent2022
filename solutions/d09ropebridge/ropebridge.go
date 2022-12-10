@@ -11,22 +11,24 @@ import (
 const ropeMagnitudeMax = 2
 
 type KnotMap struct {
-	head           []int
-	tail           []int
+	rope           [][]int
 	positionsCount int
-	relativeVector []int
+	tailIndex      int
 	positionsMap   map[string]bool
 }
 
-func newMap() *KnotMap {
+func newMap(knotCount int) *KnotMap {
 	positionsMap := map[string]bool{
 		"0,0": true,
 	}
+	knots := make([][]int, knotCount)
+	for i := 0; i < knotCount; i++ {
+		knots[i] = make([]int, 2)
+	}
 	return &KnotMap{
-		head:           []int{0, 0},
-		tail:           []int{0, 0},
+		rope:           knots,
 		positionsCount: 1,
-		relativeVector: []int{0, 0},
+		tailIndex:      knotCount - 1,
 		positionsMap:   positionsMap,
 	}
 }
@@ -49,36 +51,35 @@ func (k *KnotMap) handleInstruction(s string) {
 		moveVector[0], moveVector[1] = 1, 0
 	}
 	for i := 0; i < distance; i++ {
-		k.executeMove(moveVector)
-	}
-}
-
-func (k *KnotMap) executeMove(move []int) {
-	k.head[0] += move[0]
-	k.head[1] += move[1]
-	k.relativeVector[0] += move[0]
-	k.relativeVector[1] += move[1]
-	if k.moveTail() {
+		k.rope[0][0] += moveVector[0]
+		k.rope[0][1] += moveVector[1]
+		nextIndex := 1
+		movedNext := k.moveKnot(nextIndex)
+		for movedNext && nextIndex < k.tailIndex {
+			nextIndex += 1
+			movedNext = k.moveKnot(nextIndex)
+		}
 		k.examineTail()
 	}
 }
 
-func (k *KnotMap) moveTail() bool {
-	if magSquared(k.relativeVector[0], k.relativeVector[1]) <= ropeMagnitudeMax {
+func (k *KnotMap) moveKnot(currentIndex int) bool {
+	relativeVector := make([]int, 2)
+	relativeVector[0] = k.rope[currentIndex-1][0] - k.rope[currentIndex][0]
+	relativeVector[1] = k.rope[currentIndex-1][1] - k.rope[currentIndex][1]
+	if magSquared(relativeVector[0], relativeVector[1]) <= ropeMagnitudeMax {
 		return false
 	}
 	tailMove := []int{1, 1}
-	for i, v := range k.relativeVector {
+	for i, v := range relativeVector {
 		if v < 0 {
 			tailMove[i] = -1
 		} else if v == 0 {
 			tailMove[i] = 0
 		}
 	}
-	k.tail[0] += tailMove[0]
-	k.tail[1] += tailMove[1]
-	k.relativeVector[0] = k.head[0] - k.tail[0]
-	k.relativeVector[1] = k.head[1] - k.tail[1]
+	k.rope[currentIndex][0] += tailMove[0]
+	k.rope[currentIndex][1] += tailMove[1]
 	return true
 }
 
@@ -87,15 +88,15 @@ func magSquared(x, y int) int {
 }
 
 func (k *KnotMap) examineTail() {
-	position := fmt.Sprintf("%d,%d", k.tail[0], k.tail[1])
+	position := fmt.Sprintf("%d,%d", k.rope[k.tailIndex][0], k.rope[k.tailIndex][1])
 	if ok := k.positionsMap[position]; !ok {
 		k.positionsMap[position] = true
 		k.positionsCount += 1
 	}
 }
 
-func MoveRope(instructions []string) int {
-	knots := newMap()
+func MoveRope(instructions []string, ropeLength int) int {
+	knots := newMap(ropeLength)
 	for _, i := range instructions {
 		knots.handleInstruction(i)
 	}
@@ -104,5 +105,5 @@ func MoveRope(instructions []string) int {
 
 func Run(path string) (string, string) {
 	lines := utils.LoadAsStrings(path)
-	return strconv.Itoa(MoveRope(lines)), "B"
+	return strconv.Itoa(MoveRope(lines, 2)), strconv.Itoa(MoveRope(lines, 10))
 }
