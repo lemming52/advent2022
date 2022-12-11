@@ -68,7 +68,7 @@ def build_challenge_calls(challenges: Dict[int, str]) -> str:
     for day, name in challenges.items():
         number = str(day)
         full_number = f'{day:02d}'
-        template = f"""\tcase "{name}", "{number}", "{full_number}":
+        template = f"""\tcase "{name}", "{number}":
         input := "inputs/d{full_number}{name}.txt"
 		A, B := d{full_number}{name}.Run(input)
 		res = fmt.Sprintf("{name} Results A: %s B: %s", A, B)
@@ -87,18 +87,7 @@ import (
 )
 
 func Run(path string) (string, string) {{
-	file, err := os.Open(path)
-	if err != nil {{
-		log.Fatal(err)
-	}}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {{
-	}}
-	if err := scanner.Err(); err != nil {{
-		log.Fatal(err)
-	}}
+	lines := utils.LoadAsStrings(path)
 	return "A", "B"
 }}
 """
