@@ -32,8 +32,8 @@ Day | Challenge |Day | Challenge
 7 | `nospaceleftondevice` | 20 | ` `
 8 | `treetoptreehouse` | 21 | ` `
 9 | `ropebridge` | 22 | ` `
-10 | ` ` | 23 | ` `
-11 | ` ` | 24 | ` `
+10 | `cathoderaytube` | 23 | ` `
+11 | `monkeyinthemiddle` | 24 | ` `
 12 | ` ` | 25 | ` `
 13 | ` `
 

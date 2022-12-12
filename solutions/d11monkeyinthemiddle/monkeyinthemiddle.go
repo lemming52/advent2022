@@ -27,11 +27,11 @@ type Monkey struct {
 	inspectCount  int
 }
 
-func (m *Monkey) inspect(targets map[int]*Monkey, large bool, largestFactor int) {
+func (m *Monkey) inspect(targets map[int]*Monkey, skipDivision bool, lcd int) {
 	for _, i := range m.items {
 		m.inspectCount += 1
 		worry := m.operationFunc(i)
-		if !large {
+		if !skipDivision {
 			worry = int(worry / 3)
 		}
 		target := 0
@@ -44,7 +44,7 @@ func (m *Monkey) inspect(targets map[int]*Monkey, large bool, largestFactor int)
 		if !ok {
 			log.Fatal("no target", target)
 		}
-		worry = worry % largestFactor
+		worry = worry % lcd
 		t.items = append(t.items, worry)
 	}
 	m.items = []int{}
@@ -144,7 +144,7 @@ func Divisible(factor int) TestFunction {
 	}
 }
 
-func MonkeyBusiness(input []string, rounds int, large bool) int {
+func MonkeyBusiness(input []string, rounds int, skipDivision bool) int {
 	monkeys := map[int]*Monkey{}
 	for i := 0; i <= len(input)/7; i++ {
 		monkeys[i] = ParseMonkey(input[i*7:], i)
@@ -158,14 +158,14 @@ func MonkeyBusiness(input []string, rounds int, large bool) int {
 	return values[len(values)-1] * values[len(values)-2]
 }
 
-func Play(monkeys map[int]*Monkey, rounds int, large bool) {
-	largestFactor := 1
+func Play(monkeys map[int]*Monkey, rounds int, skipDivision bool) {
+	lcd := 1
 	for _, v := range monkeys {
-		largestFactor *= v.divisor
+		lcd *= v.divisor
 	}
 	for i := 0; i < rounds; i++ {
 		for j := 0; j < len(monkeys); j++ {
-			monkeys[j].inspect(monkeys, large, largestFactor)
+			monkeys[j].inspect(monkeys, skipDivision, lcd)
 		}
 	}
 }
