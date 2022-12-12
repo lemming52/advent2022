@@ -149,7 +149,7 @@ func MonkeyBusiness(input []string, rounds int, skipDivision bool) int {
 	for i := 0; i <= len(input)/7; i++ {
 		monkeys[i] = ParseMonkey(input[i*7:], i)
 	}
-	Play(monkeys, rounds, large)
+	Play(monkeys, rounds, skipDivision)
 	values := make([]int, len(monkeys))
 	for k, v := range monkeys {
 		values[k] = v.inspectCount

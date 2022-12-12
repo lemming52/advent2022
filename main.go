@@ -12,6 +12,7 @@ import (
 	"advent/solutions/d09ropebridge"
 	"advent/solutions/d10cathoderaytube"
 	"advent/solutions/d11monkeyinthemiddle"
+	"advent/solutions/d12hillclimbingalgorithm"
 	"flag"
 	"fmt"
 	"time"
@@ -35,6 +36,7 @@ func main() {
 		"ropebridge",
 		"cathoderaytube",
 		"monkeyinthemiddle",
+		"hillclimbingalgorithm",
 	}
 	if *all {
 		previous := time.Now()
@@ -97,6 +99,10 @@ func RunChallenge(challenge string) string {
         input := "inputs/d11monkeyinthemiddle.txt"
 		A, B := d11monkeyinthemiddle.Run(input)
 		res = fmt.Sprintf("monkeyinthemiddle Results A: %s B: %s", A, B)
+	case "hillclimbingalgorithm", "12":
+        input := "inputs/d12hillclimbingalgorithm.txt"
+		A, B := d12hillclimbingalgorithm.Run(input)
+		res = fmt.Sprintf("hillclimbingalgorithm Results A: %s B: %s", A, B)
 
     }
 	return res
