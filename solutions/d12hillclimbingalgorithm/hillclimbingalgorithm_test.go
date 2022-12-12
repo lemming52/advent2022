@@ -14,7 +14,30 @@ func TestNavigate(t *testing.T) {
 		"acctuvwj",
 		"abdefghi",
 	}
-	expected := 31
-	res := Navigate(input)
-	assert.Equal(t, expected, res)
+	tests := []struct {
+		name          string
+		input         []string
+		expected      int
+		variableStart bool
+	}{
+		{
+			name:          "a",
+			input:         input,
+			expected:      31,
+			variableStart: false,
+		}, {
+			name:          "a",
+			input:         input,
+			expected:      29,
+			variableStart: true,
+		},
+	}
+	for _, test := range tests {
+		tt := test
+		t.Run(tt.name, func(t *testing.T) {
+			res := Navigate(tt.input, tt.variableStart)
+			assert.Equal(t, tt.expected, res)
+		})
+	}
+
 }

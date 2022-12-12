@@ -69,13 +69,54 @@ func (h *Hillscape) getNeighbours(x, y int) []*Hill {
 	return correct
 }
 
-func Navigate(input []string) int {
+func Navigate(input []string, variableStart bool) int {
+	xStart, yStart := 0, 0
+	xGoal, yGoal := 0, 0
+	starts := [][]int{}
+	for i, r := range input {
+		for j, c := range r {
+			switch c {
+			case 'S':
+				if variableStart {
+					starts = append(starts, []int{i, j})
+				} else {
+					xStart = i
+					yStart = j
+				}
+			case 'E':
+				xGoal = i
+				yGoal = j
+			case 'a':
+				if variableStart {
+					starts = append(starts, []int{i, j})
+				}
+			}
+		}
+	}
+	if variableStart {
+		min := math.MaxInt
+		for _, s := range starts {
+			h := BuildHillscape(input, xGoal, yGoal)
+			h.dijkstra(s[0], s[1])
+			if h.hills[xGoal][yGoal].distance < min {
+				min = h.hills[xGoal][yGoal].distance
+			}
+		}
+		return min
+	}
+	hillscape := BuildHillscape(input, xGoal, yGoal)
+	hillscape.dijkstra(xStart, yStart)
+	return hillscape.hills[hillscape.xGoal][hillscape.yGoal].distance
+}
+
+func BuildHillscape(input []string, xGoal, yGoal int) *Hillscape {
 	hillscape := &Hillscape{
-		xMax: len(input) - 1,
-		yMax: len(input[0]) - 1,
+		xMax:  len(input) - 1,
+		yMax:  len(input[0]) - 1,
+		xGoal: xGoal,
+		yGoal: yGoal,
 	}
 	hills := make([][]*Hill, hillscape.xMax+1)
-	xStart, yStart := 0, 0
 	for i := hillscape.xMax; i >= 0; i-- {
 		hills[i] = make([]*Hill, (hillscape.yMax + 1))
 		for j := hillscape.yMax; j >= 0; j-- {
@@ -83,23 +124,18 @@ func Navigate(input []string) int {
 			switch val {
 			case 'S':
 				val = 'a'
-				xStart = i
-				yStart = j
 			case 'E':
 				val = 'z'
-				hillscape.xGoal = i
-				hillscape.yGoal = j
 			}
 			n := newHill(i, j, int(val))
 			hills[i][j] = n
 		}
 	}
 	hillscape.hills = hills
-	hillscape.dijkstra(xStart, yStart)
-	return hillscape.hills[hillscape.xGoal][hillscape.yGoal].distance
+	return hillscape
 }
 
 func Run(path string) (string, string) {
 	lines := utils.LoadAsStrings(path)
-	return strconv.Itoa(Navigate(lines)), "B"
+	return strconv.Itoa(Navigate(lines, false)), strconv.Itoa(Navigate(lines, true))
 }
