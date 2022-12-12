@@ -21,16 +21,19 @@ type Monkey struct {
 	name          int
 	operationFunc OperationFunction
 	testFunc      TestFunction
+	divisor       int
 	trueTarget    int
 	falseTarget   int
 	inspectCount  int
 }
 
-func (m *Monkey) inspect(targets map[int]*Monkey) {
+func (m *Monkey) inspect(targets map[int]*Monkey, large bool, largestFactor int) {
 	for _, i := range m.items {
 		m.inspectCount += 1
 		worry := m.operationFunc(i)
-		worry = int(worry / 3)
+		if !large {
+			worry = int(worry / 3)
+		}
 		target := 0
 		if m.testFunc(worry) {
 			target = m.trueTarget
@@ -41,6 +44,7 @@ func (m *Monkey) inspect(targets map[int]*Monkey) {
 		if !ok {
 			log.Fatal("no target", target)
 		}
+		worry = worry % largestFactor
 		t.items = append(t.items, worry)
 	}
 	m.items = []int{}
@@ -125,6 +129,7 @@ func ParseTestLines(lines []string, m *Monkey) {
 		log.Fatal(err)
 	}
 	m.testFunc = Divisible(divisibleVal)
+	m.divisor = divisibleVal
 	trueComponents := targetP.FindStringSubmatch(trueTarget)
 	trueVal, err := strconv.Atoi(trueComponents[2])
 	m.trueTarget = trueVal
@@ -139,12 +144,12 @@ func Divisible(factor int) TestFunction {
 	}
 }
 
-func MonkeyBusiness(input []string, rounds int) int {
+func MonkeyBusiness(input []string, rounds int, large bool) int {
 	monkeys := map[int]*Monkey{}
 	for i := 0; i <= len(input)/7; i++ {
 		monkeys[i] = ParseMonkey(input[i*7:], i)
 	}
-	Play(monkeys, rounds)
+	Play(monkeys, rounds, large)
 	values := make([]int, len(monkeys))
 	for k, v := range monkeys {
 		values[k] = v.inspectCount
@@ -153,15 +158,19 @@ func MonkeyBusiness(input []string, rounds int) int {
 	return values[len(values)-1] * values[len(values)-2]
 }
 
-func Play(monkeys map[int]*Monkey, rounds int) {
+func Play(monkeys map[int]*Monkey, rounds int, large bool) {
+	largestFactor := 1
+	for _, v := range monkeys {
+		largestFactor *= v.divisor
+	}
 	for i := 0; i < rounds; i++ {
 		for j := 0; j < len(monkeys); j++ {
-			monkeys[j].inspect(monkeys)
+			monkeys[j].inspect(monkeys, large, largestFactor)
 		}
 	}
 }
 
 func Run(path string) (string, string) {
 	lines := utils.LoadAsStrings(path)
-	return strconv.Itoa(MonkeyBusiness(lines, 20)), "B"
+	return strconv.Itoa(MonkeyBusiness(lines, 20, false)), strconv.Itoa(MonkeyBusiness(lines, 10000, true))
 }
