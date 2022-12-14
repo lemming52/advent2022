@@ -8,7 +8,6 @@ import (
 )
 
 func compare(l, r string) (bool, bool) {
-	//fmt.Println(l, r, "compare")
 	leftList, rightList := l[0] == '[', r[0] == '['
 	if leftList {
 		if rightList {
@@ -31,7 +30,6 @@ func compare(l, r string) (bool, bool) {
 }
 
 func compareLists(l, r string, leftConverted, rightConverted bool) (bool, bool) {
-	//fmt.Println(l, r, "compareLists", len(l), len(r))
 	if len(l) == 2 {
 		return true, len(r) != 2
 	}
@@ -87,12 +85,33 @@ func PacketOrder(lines []string) int {
 		if val {
 			sum += i + 1
 		}
-		//fmt.Println(i+1, lines[i*3], lines[i*3+1], val)
 	}
 	return sum
 }
 
+func PacketSort(lines []string) int {
+	packets := []string{}
+	for i := 0; i <= len(lines)/3; i++ {
+		packets = append(packets, lines[i*3:i*3+2]...)
+	}
+	packets = append(packets, []string{"[[2]]", "[[6]]"}...)
+	for i := 0; i < len(packets)-1; i++ {
+		for j := len(packets) - 1; j > i; j-- {
+			if correct, _ := compare(packets[j-1], packets[j]); !correct {
+				packets[j], packets[j-1] = packets[j-1], packets[j]
+			}
+		}
+	}
+	product := 1
+	for i, v := range packets {
+		if v == "[[2]]" || v == "[[6]]" {
+			product *= (i + 1)
+		}
+	}
+	return product
+}
+
 func Run(path string) (string, string) {
 	lines := utils.LoadAsStrings(path)
-	return strconv.Itoa(PacketOrder(lines)), "B"
+	return strconv.Itoa(PacketOrder(lines)), strconv.Itoa(PacketSort(lines))
 }
