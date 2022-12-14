@@ -4,6 +4,7 @@ import (
 	"advent/solutions/utils"
 	"fmt"
 	"log"
+	"sort"
 	"strconv"
 )
 
@@ -95,13 +96,10 @@ func PacketSort(lines []string) int {
 		packets = append(packets, lines[i*3:i*3+2]...)
 	}
 	packets = append(packets, []string{"[[2]]", "[[6]]"}...)
-	for i := 0; i < len(packets)-1; i++ {
-		for j := len(packets) - 1; j > i; j-- {
-			if correct, _ := compare(packets[j-1], packets[j]); !correct {
-				packets[j], packets[j-1] = packets[j-1], packets[j]
-			}
-		}
-	}
+	sort.Slice(packets, func(i, j int) bool {
+		v, _ := compare(packets[i], packets[j])
+		return v
+	})
 	product := 1
 	for i, v := range packets {
 		if v == "[[2]]" || v == "[[6]]" {
