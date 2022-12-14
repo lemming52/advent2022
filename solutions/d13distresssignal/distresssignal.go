@@ -15,19 +15,9 @@ func compare(l, r string) bool {
 			return compareLists(l, r, false, false)
 		}
 		return compareLists(l, wrapList(r), false, true)
-		//elems := parseElements(l)
-		//if len(elems) == 0 {
-		//	return true
-		//}
-		//return compare(parseElements(l)[0], r)
 	}
 	if rightList {
 		return compareLists(wrapList(l), r, true, false)
-		//elems := parseElements(r)
-		//if len(elems) == 0 {
-		//	return false
-		//}
-		//return compare(l, parseElements(r)[0])
 	}
 	lVal, err := strconv.Atoi(l)
 	if err != nil {
@@ -84,9 +74,7 @@ func parseElements(s string) []string {
 			}
 		}
 	}
-	if len(elements) != 0 {
-		elements = append(elements, s[currentElementIndex:])
-	}
+	elements = append(elements, s[currentElementIndex:])
 	return elements
 }
 
