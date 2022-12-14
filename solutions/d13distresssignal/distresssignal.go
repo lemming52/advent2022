@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func compare(l, r string) bool {
+func compare(l, r string) (bool, bool) {
 	//fmt.Println(l, r, "compare")
 	leftList, rightList := l[0] == '[', r[0] == '['
 	if leftList {
@@ -27,33 +27,31 @@ func compare(l, r string) bool {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return lVal <= rVal
+	return lVal < rVal, lVal != rVal
 }
 
-func compareLists(l, r string, leftConverted, rightConverted bool) bool {
-	//fmt.Println(l, r, "compareLists")
+func compareLists(l, r string, leftConverted, rightConverted bool) (bool, bool) {
+	//fmt.Println(l, r, "compareLists", len(l), len(r))
 	if len(l) == 2 {
-		return true
+		return true, len(r) != 2
 	}
 	if len(r) == 2 {
-		return false
+		return false, true
 	}
 	elemL, elemR := parseElements(l), parseElements(r)
-	if !rightConverted && !leftConverted && len(elemR) < len(elemL) {
-		return false
-	}
 	if len(elemL) == 0 {
-		return true
+		return true, len(elemR) != 0
 	}
 	for i, e := range elemL {
 		if i >= len(elemR) {
-			return rightConverted
+			return false, true
 		}
-		if !compare(e, elemR[i]) {
-			return false
+		correct, decided := compare(e, elemR[i])
+		if decided {
+			return correct, true
 		}
 	}
-	return true
+	return true, len(elemL) != len(elemR)
 }
 
 func parseElements(s string) []string {
@@ -85,11 +83,11 @@ func wrapList(s string) string {
 func PacketOrder(lines []string) int {
 	sum := 0
 	for i := 0; i <= len(lines)/3; i++ {
-		val := compare(lines[i*3], lines[i*3+1])
+		val, _ := compare(lines[i*3], lines[i*3+1])
 		if val {
 			sum += i + 1
 		}
-		fmt.Println(i, lines[i*3], lines[i*3+1], val)
+		//fmt.Println(i+1, lines[i*3], lines[i*3+1], val)
 	}
 	return sum
 }
