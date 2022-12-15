@@ -14,6 +14,7 @@ import (
 	"advent/solutions/d11monkeyinthemiddle"
 	"advent/solutions/d12hillclimbingalgorithm"
 	"advent/solutions/d13distresssignal"
+	"advent/solutions/d14regolithreservoir"
 	"flag"
 	"fmt"
 	"time"
@@ -39,6 +40,7 @@ func main() {
 		"monkeyinthemiddle",
 		"hillclimbingalgorithm",
 		"distresssignal",
+		"regolithreservoir",
 	}
 	if *all {
 		previous := time.Now()
@@ -109,6 +111,10 @@ func RunChallenge(challenge string) string {
         input := "inputs/d13distresssignal.txt"
 		A, B := d13distresssignal.Run(input)
 		res = fmt.Sprintf("distresssignal Results A: %s B: %s", A, B)
+	case "regolithreservoir", "14":
+        input := "inputs/d14regolithreservoir.txt"
+		A, B := d14regolithreservoir.Run(input)
+		res = fmt.Sprintf("regolithreservoir Results A: %s B: %s", A, B)
 
     }
 	return res
