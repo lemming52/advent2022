@@ -18,6 +18,7 @@ const coordPattern = `([0-9]{0,3}\,[0-9]{0,3})`
 type Cave struct {
 	volume map[string]rune
 	abyss  int
+	floor  int
 }
 
 func (c *Cave) isEmpty(x, y int) bool {
@@ -54,6 +55,7 @@ func (c *Cave) setAbyss(y1, y2 int) {
 	if y2 < y1 && y1 > c.abyss {
 		c.abyss = y1
 	}
+	c.floor = c.abyss + 1
 }
 
 func (c *Cave) setVolume(x, y int, material rune) {
@@ -64,29 +66,42 @@ func (c *Cave) key(x, y int) string {
 	return fmt.Sprintf("%d,%d", x, y)
 }
 
-func (c *Cave) fillWithSand(sourceX, sourceY int) int {
+func (c *Cave) fillWithSand(sourceX, sourceY int, hasFloor bool) int {
 	pastAbyss := false
 	count := -1
+	sourceKey := c.key(sourceX, sourceY)
 	for !pastAbyss {
-		pastAbyss = c.dropSand(sourceX, sourceY)
+		pastAbyss = c.dropSand(sourceX, sourceY, hasFloor)
+		count += 1
+		if c.volume[sourceKey] == sand {
+			break
+		}
+	}
+	if hasFloor {
 		count += 1
 	}
 	return count
 }
 
-func (c *Cave) dropSand(x, y int) bool {
+func (c *Cave) dropSand(x, y int, hasFloor bool) bool {
 	if y > c.abyss {
-		return true
+		if !hasFloor {
+			return true
+		}
+		if y == c.floor {
+			candidates := getCandidates(x, y)
+			for _, coords := range candidates {
+				c.setVolume(coords[0], coords[1], rock)
+			}
+			c.setVolume(x, y, sand)
+			return false
+		}
 	}
-	candidates := [][]int{
-		{x, y + 1},
-		{x - 1, y + 1},
-		{x + 1, y + 1},
-	}
+	candidates := getCandidates(x, y)
 	for _, coords := range candidates {
 		_, ok := c.volume[c.key(coords[0], coords[1])]
 		if !ok {
-			return c.dropSand(coords[0], coords[1])
+			return c.dropSand(coords[0], coords[1], hasFloor)
 		}
 	}
 	c.setVolume(x, y, sand)
@@ -110,7 +125,15 @@ func (c *Cave) print() {
 	}
 }
 
-func FillCave(lines []string) int {
+func getCandidates(x, y int) [][]int {
+	return [][]int{
+		{x, y + 1},
+		{x - 1, y + 1},
+		{x + 1, y + 1},
+	}
+}
+
+func FillCave(lines []string, hasFloor bool) int {
 	c := &Cave{volume: map[string]rune{}}
 	pattern := regexp.MustCompile(coordPattern)
 	for _, l := range lines {
@@ -122,7 +145,7 @@ func FillCave(lines []string) int {
 			prior = next
 		}
 	}
-	return c.fillWithSand(500, 0)
+	return c.fillWithSand(500, 0, hasFloor)
 }
 
 func parseCoords(s string) []int {
@@ -140,5 +163,5 @@ func parseCoords(s string) []int {
 
 func Run(path string) (string, string) {
 	lines := utils.LoadAsStrings(path)
-	return strconv.Itoa(FillCave(lines)), "B"
+	return strconv.Itoa(FillCave(lines, false)), strconv.Itoa(FillCave(lines, true))
 }
