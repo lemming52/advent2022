@@ -3,6 +3,7 @@ package d16proboscideavolcanium
 import (
 	"advent/solutions/utils"
 	"container/heap"
+	"fmt"
 	"math"
 	"regexp"
 	"sort"
@@ -13,11 +14,12 @@ import (
 const valvePattern = `Valve ([A-Z]{2}) has flow rate=(\d{1,2}); (tunnels|tunnel) (lead|leads) to (valves|valve) ([A-Z\, ]+)`
 
 type Cave struct {
-	valves    map[string]*Valve
-	flowrate  int
-	totalFlow int
-	time      int
-	maxTime   int
+	valves       map[string]*Valve
+	usefulValves []string
+	flowrate     int
+	totalFlow    int
+	time         int
+	maxTime      int
 }
 
 func (c *Cave) escape(start string) int {
@@ -51,6 +53,41 @@ func (c *Cave) escape(start string) int {
 	return c.totalFlow
 }
 
+func (c *Cave) exploreOption(name string, openValves map[string]bool, time, flowrate, total int, path string) int {
+	foundOption := false
+	maxValue := total
+	for _, n := range c.usefulValves {
+		if ok := openValves[n]; ok {
+			continue
+		}
+		newTime := time + c.valves[name].distances[n].distance + 1
+		if newTime > c.maxTime {
+			continue
+		}
+		foundOption = true
+		newValves := make(map[string]bool, len(openValves)+1)
+		for k, v := range openValves {
+			newValves[k] = v
+		}
+		newValves[n] = true
+		result := c.exploreOption(
+			n,
+			newValves,
+			newTime,
+			flowrate+c.valves[n].flowrate,
+			total+(flowrate*(c.valves[name].distances[n].distance+1)),
+			fmt.Sprintf("%s,%s", path, n),
+		)
+		if result > maxValue {
+			maxValue = result
+		}
+	}
+	if !foundOption {
+		maxValue += (c.maxTime - time) * flowrate
+	}
+	return maxValue
+}
+
 func (c *Cave) flow(time int) {
 	c.totalFlow += c.flowrate * time
 }
@@ -75,13 +112,19 @@ type DistanceRecord struct {
 func SaveTheElephants(lines []string) int {
 	valves := BuildValves(lines)
 	cave := &Cave{
-		valves:    valves,
-		flowrate:  0,
-		totalFlow: 0,
-		time:      0,
-		maxTime:   30,
+		valves:       valves,
+		flowrate:     0,
+		totalFlow:    0,
+		time:         0,
+		maxTime:      30,
+		usefulValves: []string{},
 	}
-	return cave.escape("AA")
+	for k, v := range cave.valves {
+		if v.flowrate > 0 {
+			cave.usefulValves = append(cave.usefulValves, k)
+		}
+	}
+	return cave.exploreOption("AA", map[string]bool{}, 0, 0, 0, "AA")
 }
 
 func BuildValves(lines []string) map[string]*Valve {
@@ -150,9 +193,6 @@ func ComputeDistances(valve *Valve) {
 			break
 		}
 		current := heap.Pop(&pq).(*DistanceRecord)
-		if current.visited == true {
-			continue
-		}
 		current.visited = true
 		visitedCount += 1
 		neighbours := current.valve.neighbours
