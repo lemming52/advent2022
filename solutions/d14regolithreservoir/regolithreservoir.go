@@ -9,7 +9,6 @@ import (
 	"strings"
 )
 
-const air = ' '
 const rock = '#'
 const sand = 'o'
 
@@ -19,10 +18,6 @@ type Cave struct {
 	volume map[string]rune
 	abyss  int
 	floor  int
-}
-
-func (c *Cave) isEmpty(x, y int) bool {
-	return c.volume[c.key(x, y)] == air
 }
 
 func (c *Cave) addLine(x1, y1, x2, y2 int) {
