@@ -17,6 +17,7 @@ import (
 	"advent/solutions/d14regolithreservoir"
 	"advent/solutions/d15beaconexclusionzone"
 	"advent/solutions/d16proboscideavolcanium"
+	"advent/solutions/d17pyroclasticflow"
 	"flag"
 	"fmt"
 	"time"
@@ -45,6 +46,7 @@ func main() {
 		"regolithreservoir",
 		"beaconexclusionzone",
 		"proboscideavolcanium",
+		"pyroclasticflow",
 	}
 	if *all {
 		previous := time.Now()
@@ -127,6 +129,10 @@ func RunChallenge(challenge string) string {
         input := "inputs/d16proboscideavolcanium.txt"
 		A, B := d16proboscideavolcanium.Run(input)
 		res = fmt.Sprintf("proboscideavolcanium Results A: %s B: %s", A, B)
+	case "pyroclasticflow", "17":
+        input := "inputs/d17pyroclasticflow.txt"
+		A, B := d17pyroclasticflow.Run(input)
+		res = fmt.Sprintf("pyroclasticflow Results A: %s B: %s", A, B)
 
     }
 	return res
