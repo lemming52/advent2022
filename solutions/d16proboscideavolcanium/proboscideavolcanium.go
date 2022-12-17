@@ -161,6 +161,7 @@ func (c *Cave) exploreElephantCrude() int {
 	time := 4
 	for time < c.maxTime {
 		newPossibilities := []*Possibility{}
+		maxScore := 0
 		for _, p := range possibilities {
 			if p.busyMe == 0 && p.busyElephant == 0 {
 				foundOption := false
@@ -205,7 +206,13 @@ func (c *Cave) exploreElephantCrude() int {
 						newPossibility.elephant = n[1]
 						newPossibility.openValves[n[1]] = newElephantTime
 					}
-					newPossibilities = append(newPossibilities, newPossibility)
+					score := score(c.valves, newPossibility.openValves, c.maxTime)
+					if score > maxScore {
+						maxScore = score
+					}
+					if score > maxScore*4/5 {
+						newPossibilities = append(newPossibilities, newPossibility)
+					}
 				}
 				if !foundOption {
 					newValves := make(map[string]int, len(p.openValves)+2)
@@ -219,7 +226,13 @@ func (c *Cave) exploreElephantCrude() int {
 						me:           p.me,
 						elephant:     p.elephant,
 					}
-					newPossibilities = append(newPossibilities, newPossibility)
+					score := score(c.valves, newPossibility.openValves, c.maxTime)
+					if score > maxScore {
+						maxScore = score
+					}
+					if score > maxScore*4/5 {
+						newPossibilities = append(newPossibilities, newPossibility)
+					}
 				}
 			} else if p.busyMe == 0 {
 				foundOption := false
@@ -253,7 +266,13 @@ func (c *Cave) exploreElephantCrude() int {
 							elephant:     p.elephant,
 						}
 					}
-					newPossibilities = append(newPossibilities, newPossibility)
+					score := score(c.valves, newPossibility.openValves, c.maxTime)
+					if score > maxScore {
+						maxScore = score
+					}
+					if score > maxScore*4/5 {
+						newPossibilities = append(newPossibilities, newPossibility)
+					}
 				}
 				if !foundOption {
 					newValves := make(map[string]int, len(p.openValves)+2)
@@ -267,7 +286,13 @@ func (c *Cave) exploreElephantCrude() int {
 						me:           p.me,
 						elephant:     p.elephant,
 					}
-					newPossibilities = append(newPossibilities, newPossibility)
+					score := score(c.valves, newPossibility.openValves, c.maxTime)
+					if score > maxScore {
+						maxScore = score
+					}
+					if score > maxScore*4/5 {
+						newPossibilities = append(newPossibilities, newPossibility)
+					}
 				}
 			} else if p.busyElephant == 0 {
 				foundOption := false
@@ -306,7 +331,13 @@ func (c *Cave) exploreElephantCrude() int {
 							elephant:     p.elephant,
 						}
 					}
-					newPossibilities = append(newPossibilities, newPossibility)
+					score := score(c.valves, newPossibility.openValves, c.maxTime)
+					if score > maxScore {
+						maxScore = score
+					}
+					if score > maxScore*4/5 {
+						newPossibilities = append(newPossibilities, newPossibility)
+					}
 				}
 				if !foundOption {
 					newValves := make(map[string]int, len(p.openValves)+2)
@@ -320,7 +351,13 @@ func (c *Cave) exploreElephantCrude() int {
 						me:           p.me,
 						elephant:     p.elephant,
 					}
-					newPossibilities = append(newPossibilities, newPossibility)
+					score := score(c.valves, newPossibility.openValves, c.maxTime)
+					if score > maxScore {
+						maxScore = score
+					}
+					if score > maxScore*4/5 {
+						newPossibilities = append(newPossibilities, newPossibility)
+					}
 				}
 			} else {
 				newValves := make(map[string]int, len(p.openValves)+2)
@@ -351,6 +388,14 @@ func (c *Cave) exploreElephantCrude() int {
 		}
 	}
 	return maxFlow
+}
+
+func score(valves map[string]*Valve, m map[string]int, maxTime int) int {
+	flow := 0
+	for k, v := range m {
+		flow += valves[k].flowrate * (maxTime - v)
+	}
+	return flow
 }
 
 type Possibility struct {
