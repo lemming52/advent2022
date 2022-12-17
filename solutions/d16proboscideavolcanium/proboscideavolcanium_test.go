@@ -19,7 +19,8 @@ func TestSaveTheElephants(t *testing.T) {
 		"Valve II has flow rate=0; tunnels lead to valves AA, JJ",
 		"Valve JJ has flow rate=21; tunnel leads to valve II",
 	}
-	expected := 0
-	res := SaveTheElephants(input)
-	assert.Equal(t, expected, res)
+	expectedA, expectedB := 1651, 1707
+	resA, resB := SaveTheElephants(input)
+	assert.Equal(t, expectedA, resA)
+	assert.Equal(t, expectedB, resB)
 }
