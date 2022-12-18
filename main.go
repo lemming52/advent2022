@@ -18,6 +18,7 @@ import (
 	"advent/solutions/d15beaconexclusionzone"
 	"advent/solutions/d16proboscideavolcanium"
 	"advent/solutions/d17pyroclasticflow"
+	"advent/solutions/d18boilingboulders"
 	"flag"
 	"fmt"
 	"time"
@@ -47,6 +48,7 @@ func main() {
 		"beaconexclusionzone",
 		"proboscideavolcanium",
 		"pyroclasticflow",
+		"boilingboulders",
 	}
 	if *all {
 		previous := time.Now()
@@ -133,6 +135,10 @@ func RunChallenge(challenge string) string {
         input := "inputs/d17pyroclasticflow.txt"
 		A, B := d17pyroclasticflow.Run(input)
 		res = fmt.Sprintf("pyroclasticflow Results A: %s B: %s", A, B)
+	case "boilingboulders", "18":
+        input := "inputs/d18boilingboulders.txt"
+		A, B := d18boilingboulders.Run(input)
+		res = fmt.Sprintf("boilingboulders Results A: %s B: %s", A, B)
 
     }
 	return res
