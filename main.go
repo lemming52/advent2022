@@ -19,6 +19,7 @@ import (
 	"advent/solutions/d16proboscideavolcanium"
 	"advent/solutions/d17pyroclasticflow"
 	"advent/solutions/d18boilingboulders"
+	"advent/solutions/d19notenoughminerals"
 	"flag"
 	"fmt"
 	"time"
@@ -49,6 +50,7 @@ func main() {
 		"proboscideavolcanium",
 		"pyroclasticflow",
 		"boilingboulders",
+		"notenoughminerals",
 	}
 	if *all {
 		previous := time.Now()
@@ -139,6 +141,10 @@ func RunChallenge(challenge string) string {
         input := "inputs/d18boilingboulders.txt"
 		A, B := d18boilingboulders.Run(input)
 		res = fmt.Sprintf("boilingboulders Results A: %s B: %s", A, B)
+	case "notenoughminerals", "19":
+        input := "inputs/d19notenoughminerals.txt"
+		A, B := d19notenoughminerals.Run(input)
+		res = fmt.Sprintf("notenoughminerals Results A: %s B: %s", A, B)
 
     }
 	return res
